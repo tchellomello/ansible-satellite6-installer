@@ -53,7 +53,7 @@ cat playbook_install_sat.yml
     - ansible-satellite6-install
 ~~~
 
-- 4) Configure the satellite into the ansible hosts "/etc/ansible/hosts"
+- 4) Entry the Satellite service into the inventory file
 
 - 5) Run the ansible-playbook command and wait. 
 
