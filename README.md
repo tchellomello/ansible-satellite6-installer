@@ -64,15 +64,26 @@ cat playbook_install_sat.yml
     `read RHSM_USER`
     `read -s RHSM_PASSWORD`
     `read -s FOREMAN_ADMIN_PASSWORD`
-    `ansible-playbook -k -l satellite_servers satellite_installer.yaml \`
+    `ansible-playbook -k -l satellite_servers \`
     `    -e rhsm_user=$RHSM_USER \`
     `    -e rhsm_password=RHSM_PASSWORD \`
     `    -e satellite_version="6.4" \`
     `    -e foreman_admin_password=$FOREMAN_ADMIN_PASSWORD \`
-    `    -e manifest_name=/root/manifest.zip`
-
+    `    -e manifest_name=/root/manifest.zip \`
+    `    satellite_installer.yaml`
 
         Get a coffee and be happy \o/
+
+## Using tags
+`registration` - registration tasks
+`repositories` - Satellite repositories operations
+`firewalld` - firewalld configuration
+`hostname` - adjust and entry hostname into /etc/hosts
+`install_software` - update and install packages required by Satellite
+`install_satellite`- run Satellite installer
+`sync_repos` - enable content repositories
+`sync_repos_monitor` - monitor sync process. Skip this tag if you don't want to wait the sync process
+
 
 ## Variables
 To see the default values please check the `main.yml` file in the `vars` directory in the role.

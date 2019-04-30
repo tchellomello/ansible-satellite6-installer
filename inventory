@@ -1,4 +1,4 @@
 [satellite_servers]
 #satellite.example.com ansible_host=192.168.122.49 ansible_user=root
 dhcp181-61.gsslab.rdu2.redhat.com ansible_host=10.10.181.61 ansible_user=root
-#sat6.playbook.test ansible_host=192.168.122.49 ansible_user=root
+sat6.playbook.test ansible_host=192.168.122.174 ansible_user=root

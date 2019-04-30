@@ -16,6 +16,7 @@ manifest_name: "manifest_satellite_{{ satellite_version }}.zip"
 cv_name: "cv_rhel7_base"
 satellite_package_version: "satellite"
 default_download_policy: "on_demand"
+sync_timeout: 120
 
 firewall_services:
   - ssh
