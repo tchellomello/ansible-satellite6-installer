@@ -17,26 +17,36 @@
 
 - name: firewall | Set hostname
   command: hostnamectl set-hostname {{ hostname_full }}
+  tags:
+    - firewalld
+    - hostname
 
 - name: firewall | Add hostname to /etc/hosts
   lineinfile:
     dest: /etc/hosts
     line: "{{ ip_address_sat }} {{ hostname_full }} {{ hostname_short }}"
   tags:
+    - firewalld
     - hostname
 
 - name: firewall | Enable ports in firewall
   firewalld:
     port: "{{ item }}"
     permanent: yes
+    immediate: yes
     state: enabled
   with_items:
     - "{{ firewall_ports }}"
+  tags:
+    - firewalld
 
 - name: firewall | Enable service in firewall
   firewalld:
     service: "{{ item }}"
     permanent: yes
+    immediate: yes
     state: enabled
   with_items:
     - "{{ firewall_services }}"
+  tags:
+    - firewalld

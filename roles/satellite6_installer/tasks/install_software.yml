@@ -1,16 +1,15 @@
 ---
-- name: install_software | Clean out any residual metadata from old repositories
-  command: yum clean all
-  #warn: False
-
 - name: install_software | Update currently installed  packages
   yum:
     name: "*"
     state: latest
+    update_cache: yes
+  tags:
+    - install_software
 
 - name: install_software | Install Satellite and Additional Packages
   yum:
-    name: "{{ item }}"
+    name: "{{ packages_list }}"
     state: latest
-  with_items:
-    - "{{ packages_list }}"
+  tags:
+    - install_software

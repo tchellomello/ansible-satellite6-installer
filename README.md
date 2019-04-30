@@ -59,6 +59,19 @@ cat playbook_install_sat.yml
 
   `ansible-playbook playbook_install_sat.yml -l <satellite_host>`
 
+  - Or execute it via command-line passing the variables via argument
+
+    `read RHSM_USER`
+    `read -s RHSM_PASSWORD`
+    `read -s FOREMAN_ADMIN_PASSWORD`
+    `ansible-playbook -k -l satellite_servers satellite_installer.yaml \`
+    `    -e rhsm_user=$RHSM_USER \`
+    `    -e rhsm_password=RHSM_PASSWORD \`
+    `    -e satellite_version="6.4" \`
+    `    -e foreman_admin_password=$FOREMAN_ADMIN_PASSWORD \`
+    `    -e manifest_name=/root/manifest.zip`
+
+
         Get a coffee and be happy \o/
 
 ## Variables

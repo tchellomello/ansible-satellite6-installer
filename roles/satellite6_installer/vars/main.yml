@@ -1,6 +1,8 @@
 ---
 rhsm_user: "MYRHSMUSER"
 rhsm_password: "CHANGEME"
+rhsm_pool_id: "8a85f9833e1404a9013e3cddf95a0599"
+rhsm_pool_name: "Red Hat Satellite"
 satellite_version: "6.4"
 satellite_scenario: satellite
 hostname_full: '{{ ansible_fqdn }}'
@@ -13,6 +15,7 @@ manifest_path: /root
 manifest_name: "manifest_satellite_{{ satellite_version }}.zip"
 cv_name: "cv_rhel7_base"
 satellite_package_version: "satellite"
+default_download_policy: "on_demand"
 
 firewall_services:
   - ssh
@@ -29,5 +32,5 @@ packages_list:
   - git
   - bash-completion
   - screen
-  - vim-*
+  - vim-enhanced
   - chrony

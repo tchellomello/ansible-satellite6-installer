@@ -8,38 +8,49 @@
     mode: 0644
   tags:
     - configure_satellite
+    - configure_satellite_manifest
 
-- name: configure_satellite | Configure the manifest to Satellite
+- name: configure_satellite | Upload manifest to Satellite
   command: /usr/bin/hammer -u admin -p "{{ foreman_admin_password }}" subscription upload --file "{{ manifest_path }}/{{ manifest_name }}" --organization  "{{ foreman_initial_organization }}"
   tags:
     - configure_satellite
+    - configure_satellite_manifest
+  register: manifest_upload
+  failed_when:
+      # if manifest has been already uploaded, we should continue
+    - "'existing data' not in manifest_upload.stderr"
+    - "manifest_upload.rc != 0"
 
 - name: configure_satellite | Update the manifest to Satellite
   command: /usr/bin/hammer -u admin -p "{{ foreman_admin_password }}" subscription refresh-manifest --organization  "{{ foreman_initial_organization }}"
   tags:
     - configure_satellite
+    - configure_satellite_manifest
 
-- name: configure_satellite | Enable RedHat Repositoty RHEL7
-  command: /usr/bin/hammer -u admin -p "{{ foreman_admin_password }}" settings set --name default_download_policy --value on_demand
+- name: configure_satellite | Setting Default Download Policy to {{ default_download_policy }}
+  command: /usr/bin/hammer -u admin -p "{{ foreman_admin_password }}" settings set --name default_download_policy --value "{{ default_download_policy }}"
   tags:
     - configure_satellite
+    - configure_satellite_default_download_policy
 
-- name: configure_satellite | Enable RedHat Repositoty RHEL7
+- name: configure_satellite | Enable RedHat Repository RHEL7
   command: "{{ item }}"
   when: satellite_version == "6.2"
   tags:
-    - enable_repos
+    - configure_satellite
+    - configure_satellite_enable_repos
   ignore_errors: yes
   with_items:
    - /usr/bin/hammer -u admin -p "{{ foreman_admin_password }}" repository-set enable --name 'Red Hat Enterprise Linux 7 Server (Kickstart)' --organization "{{ foreman_initial_organization }}" --product 'Red Hat Enterprise Linux Server' --basearch x86_64 --releasever 7Server
    - /usr/bin/hammer -u admin -p "{{ foreman_admin_password }}" repository-set enable --name 'Red Hat Enterprise Linux 7 Server (RPMs)' --organization "{{ foreman_initial_organization }}" --product 'Red Hat Enterprise Linux Server' --basearch x86_64 --releasever 7Server
    - /usr/bin/hammer -u admin -p "{{ foreman_admin_password }}" repository-set enable --name 'Red Hat Satellite Tools 6.2 (for RHEL 7 Server) (RPMs)' --organization "{{ foreman_initial_organization }}" --product 'Red Hat Enterprise Linux Server' --basearch x86_64
 
-- name: configure_satellite | Enable RedHat Repositoty RHEL7
+- name: configure_satellite | Enable RedHat Repository RHEL7
   command: "{{ item }}"
   when: satellite_version == "6.3"
   tags:
-    - enable_repos
+    - configure_satellite
+    - configure_satellite_enable_repos
   ignore_errors: yes
   with_items:
    - /usr/bin/hammer -u admin -p "{{ foreman_admin_password }}" repository-set enable --name 'Red Hat Enterprise Linux 7 Server (Kickstart)' --organization "{{ foreman_initial_organization }}" --product 'Red Hat Enterprise Linux Server' --basearch x86_64 --releasever 7Server
@@ -47,11 +58,12 @@
    - /usr/bin/hammer -u admin -p "{{ foreman_admin_password }}" repository-set enable --name 'Red Hat Satellite Tools 6.3 (for RHEL 7 Server) (RPMs)' --organization "{{ foreman_initial_organization }}" --product 'Red Hat Enterprise Linux Server' --basearch x86_64
    - /usr/bin/hammer -u admin -p "{{ foreman_admin_password }}" repository-set enable --name 'Red Hat Satellite Tools 6.3 - Puppet 4 (for RHEL 7 Server) (RPMs)' --organization "{{ foreman_initial_organization }}" --product 'Red Hat Enterprise Linux Server' --basearch x86_64
 
-- name: configure_satellite | Enable RedHat Repositoty RHEL7
+- name: configure_satellite | Enable RedHat Repository RHEL7
   command: "{{ item }}"
   when: satellite_version == "6.4"
   tags:
-    - enable_repos
+    - configure_satellite
+    - configure_satellite_enable_repos
   ignore_errors: yes
   with_items:
    - /usr/bin/hammer -u admin -p "{{ foreman_admin_password }}" repository-set enable --name 'Red Hat Enterprise Linux 7 Server (Kickstart)' --organization "{{ foreman_initial_organization }}" --product 'Red Hat Enterprise Linux Server' --basearch x86_64 --releasever 7Server
